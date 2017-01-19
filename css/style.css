@@ -1,0 +1,26 @@
+.main {
+  width: 400px;
+  background-color: gray;
+  margin-top: 20px;
+}
+
+.vertical-centered {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.button-container {
+  width: 100px;
+  background-color: white;
+  margin-bottom: 10px;
+}
+
+.large-button-container {
+  width: 200px;
+}
+
+.myButton {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
