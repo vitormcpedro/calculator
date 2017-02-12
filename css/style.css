@@ -1,3 +1,15 @@
+body {
+  background-color: #3B3738;
+}
+
+a {
+  color: #C63D0F;
+}
+
+a:hover {
+  color: lightcoral;
+}
+
 .main {
   width: 310px;
   border: 5px solid gray;
@@ -5,12 +17,6 @@
   margin-top: 20px;
   background-color: lightgray;
   font-family: 'Orbitron', sans-serif;
-}
-
-.vertical-centered {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .button-container {
@@ -45,4 +51,9 @@
   font-size: 14px;
 }
 
-  
+.author {
+  margin-top: 20px;
+  color: #FDF3E7;
+  text-align: center;
+  font-family: 'Raleway', sans-serif;
+}  
