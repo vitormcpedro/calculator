@@ -1,7 +1,7 @@
 (function(){
   var app = angular.module('calculator', [ ]);
 
-  app.controller("CalculatorController", function() {
+  app.controller("CalculatorController", ['$scope', function($scope) {
     var operands = [0,""];
     var operation = "+";
     var history = [];
@@ -30,50 +30,69 @@
       equalsPressed = false;
     }
 
-
-    this.mainDisplay = "0";
-    this.secondDisplay = "0";
-
-    this.numberTyped = function(num) {
-      if(equalsPressed) {
-        reset();
+    function appendToSecondDisplay(str) {
+      if($scope.secondDisplay === "0") {
+        $scope.secondDisplay = str;
+      } else {
+        $scope.secondDisplay += str;
       }
-      operands[1] += num;
-      this.mainDisplay = operands[1];
     }
 
-    this.operationTyped = function(op) {
+    $scope.mainDisplay = "0";
+    $scope.secondDisplay = "0";
+
+    $scope.numberTyped = function(num) {
+      if(equalsPressed) {
+        reset();
+        $scope.secondDisplay = "0";
+      }
+      operands[1] += num;
+      $scope.mainDisplay = operands[1];
+      appendToSecondDisplay(num);
+    }
+
+    $scope.operationTyped = function(op) {
       console.log(op);
-      equalsPressed = false;
       var result = operators[operation](operands[0], Number(operands[1]));
+      console.log(result);
       operands[0] = result;
       operands[1] = "";
       operation = op;
-      this.mainDisplay = operation;
-      console.log(result);
+      $scope.mainDisplay = operation;
+      if(equalsPressed) {
+        equalsPressed = false;
+        $scope.secondDisplay = String(result) + operation;
+      } else {
+        appendToSecondDisplay(operation);
+      }
     }
 
-    this.equalsTyped = function() {
+    $scope.equalsTyped = function() {
+      if(equalsPressed) {
+        return;
+      }
       var result = operators[operation](operands[0], Number(operands[1]));
+      console.log(result);
       operands[0] = result;
       operands[1] = "0";
       operation = "+";
       equalsPressed = true;
-      this.mainDisplay = result;
-      console.log(result);
+      $scope.mainDisplay = result;
+      appendToSecondDisplay("="+String(result));
     };
 
-    this.resetTyped = function() {
+    $scope.resetTyped = function() {
       reset();
-      this.mainDisplay = "0";
+      $scope.mainDisplay = "0";
+      $scope.secondDisplay = "0";
     };
 
-    this.clearTyped = function() {
+    $scope.clearTyped = function() {
       if(operands[1] !== "0") {
         operands[1] = "";
       }
-      this.mainDisplay = "0";
+      $scope.mainDisplay = "0";
     }
 
-  });
+  }]);
 })();
