@@ -1,81 +1,79 @@
-var operands = [0,""];
-var operation = "+";
-var history = [];
-var equalsPressed = false;
-var secondDisplayText = "";
+(function(){
+  var app = angular.module('calculator', [ ]);
 
-var operators = {
-  "+": function(num1, num2) {
-    return num1 + num2;
-  },
-  "-": function(num1, num2) {
-    return num1 - num2;
-  },
-  "x": function(num1, num2) {
-    return num1 * num2;
-  },
-  "/": function(num1, num2) {
-    return num1 / num2;
-  },
-}
+  app.controller("CalculatorController", function() {
+    var operands = [0,""];
+    var operation = "+";
+    var history = [];
+    var equalsPressed = false;
+    var secondDisplayText = "";
 
-function numberTyped(num) {
-  if(equalsPressed) {
-    reset();
-  }
-  operands[1] += num;
-  $("#mainDisplay").text(operands[1]);
-}
+    var operators = {
+      "+": function(num1, num2) {
+        return num1 + num2;
+      },
+      "-": function(num1, num2) {
+        return num1 - num2;
+      },
+      "x": function(num1, num2) {
+        return num1 * num2;
+      },
+      "/": function(num1, num2) {
+        return num1 / num2;
+      },
+    }
 
-function operationTyped(op) {
-  console.log(op);
-  equalsPressed = false;
-  var result = operators[operation](operands[0], Number(operands[1]));
-  operands[0] = result;
-  operands[1] = "";
-  operation = op;
-  $("#mainDisplay").text(operation);
-  console.log(result);
-}
+    function reset() {
+      operands[0] = 0;
+      operands[1] = "";
+      operation = "+";
+      equalsPressed = false;
+    }
 
-function reset() {
-  operands[0] = 0;
-  operands[1] = "";
-  operation = "+";
-  equalsPressed = false;
-}
 
-$(document).ready(function() {
-  $("#mainDisplay").text(0);
-  $("#secondDisplay").text(0);
-});
+    this.mainDisplay = "0";
+    this.secondDisplay = "0";
 
-$( ".numberBtn" ).click(function() {
-  numberTyped($(this).attr('id'));
-});
+    this.numberTyped = function(num) {
+      if(equalsPressed) {
+        reset();
+      }
+      operands[1] += num;
+      this.mainDisplay = operands[1];
+    }
 
-$( ".operationBtn" ).click(function() {
-  operationTyped($(this).attr('id'));
-});
+    this.operationTyped = function(op) {
+      console.log(op);
+      equalsPressed = false;
+      var result = operators[operation](operands[0], Number(operands[1]));
+      operands[0] = result;
+      operands[1] = "";
+      operation = op;
+      this.mainDisplay = operation;
+      console.log(result);
+    }
 
-$( "#equals" ).click(function() {
-  var result = operators[operation](operands[0], Number(operands[1]));
-  operands[0] = result;
-  operands[1] = "0";
-  operation = "+";
-  equalsPressed = true;
-  $("#mainDisplay").text(result);
-  console.log(result);
-});
+    this.equalsTyped = function() {
+      var result = operators[operation](operands[0], Number(operands[1]));
+      operands[0] = result;
+      operands[1] = "0";
+      operation = "+";
+      equalsPressed = true;
+      this.mainDisplay = result;
+      console.log(result);
+    };
 
-$( "#resetBtn" ).click(function() {
-  reset();
-  $("#mainDisplay").text(0);
-});
+    this.resetTyped = function() {
+      reset();
+      this.mainDisplay = "0";
+    };
 
-$( "#clearBtn" ).click(function() {
-  if(operands[1] !== "0") {
-    operands[1] = "";
-  }
-  $("#mainDisplay").text(0);
-});
+    this.clearTyped = function() {
+      if(operands[1] !== "0") {
+        operands[1] = "";
+      }
+      this.mainDisplay = "0";
+    }
+
+  });
+})();
