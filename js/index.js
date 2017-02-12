@@ -6,7 +6,6 @@
     var operation = "+";
     var history = [];
     var equalsPressed = false;
-    var secondDisplayText = "";
 
     var operators = {
       "+": function(num1, num2) {
@@ -38,6 +37,35 @@
       }
     }
 
+    function isOperator(char) {
+      var result = false;
+      switch(char) {
+        case '+':
+        case '-':
+        case 'x':
+        case '/':
+          result = true;
+      }
+
+      return result;
+    }
+
+    function clearLastNumberInSecondDisplay() {
+      var i;
+      for(i = $scope.secondDisplay.length-1; i >= 0; i--) {
+        if(isOperator($scope.secondDisplay[i])) {
+          break;
+        }
+      }
+      $scope.secondDisplay = $scope.secondDisplay.slice(0,i+1);
+      if(!$scope.secondDisplay.length) {
+        $scope.secondDisplay = "0";
+      }
+    }
+
+
+
+
     $scope.mainDisplay = "0";
     $scope.secondDisplay = "0";
 
@@ -45,6 +73,9 @@
       if(equalsPressed) {
         reset();
         $scope.secondDisplay = "0";
+      }
+      if(operands[1].length > 8) {
+        return;
       }
       operands[1] += num;
       $scope.mainDisplay = operands[1];
@@ -55,10 +86,14 @@
       console.log(op);
       var result = operators[operation](operands[0], Number(operands[1]));
       console.log(result);
-      operands[0] = result;
-      operands[1] = "";
       operation = op;
       $scope.mainDisplay = operation;
+      if(operands[1] === "") {
+        return;
+      }
+      operands[0] = result;
+      operands[1] = "";
+      
       if(equalsPressed) {
         equalsPressed = false;
         $scope.secondDisplay = String(result) + operation;
@@ -89,6 +124,7 @@
 
     $scope.clearTyped = function() {
       if(operands[1] !== "0") {
+        clearLastNumberInSecondDisplay();
         operands[1] = "";
       }
       $scope.mainDisplay = "0";
